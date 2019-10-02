@@ -1,0 +1,12 @@
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/AppDelegate.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/ContentView.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/EditTimerForm.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/EditSoundsForm.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/TimerEntity+CoreDataClass.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Tools/SoundFileData.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/DurationEntity+CoreDataClass.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/SceneDelegate.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Tools/PickerControl.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/BaseTimer.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/EditTimesForm.swift
+/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/IntervalEntity+CoreDataClass.swift

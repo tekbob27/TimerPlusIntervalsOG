@@ -1,0 +1,16 @@
+version: "Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)"
+options: "4525391f0ad62ac5fa18d4b15292f345"
+build_time: [1569973185, 138697000]
+inputs:
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/AppDelegate.swift": [1566993429, 315720681]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/ContentView.swift": [1569844976, 449197458]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/EditTimerForm.swift": [1569768090, 64875634]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/EditSoundsForm.swift": [1569973185, 89368793]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/TimerEntity+CoreDataClass.swift": [1567211342, 927007545]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Tools/SoundFileData.swift": [1569933705, 830798641]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/DurationEntity+CoreDataClass.swift": [1567208760, 851892688]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/SceneDelegate.swift": [1567210865, 771050699]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Tools/PickerControl.swift": [1567284980, 849500143]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/BaseTimer.swift": [1567211796, 441087861]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/EditTimesForm.swift": [1569768090, 18950097]
+  "/Users/roconno3/Documents/Projects/SwiftUI/TimersWithIntervalsCD/TimersWithIntervalsCD/Models/IntervalEntity+CoreDataClass.swift": [1567209474, 673142379]

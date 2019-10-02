@@ -16,6 +16,18 @@
 		7E4B8B802316A39700CF1625 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E4B8B7E2316A39700CF1625 /* LaunchScreen.storyboard */; };
 		7E4B8B8B2316A39700CF1625 /* TimersWithIntervalsCDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4B8B8A2316A39700CF1625 /* TimersWithIntervalsCDTests.swift */; };
 		7E4B8B962316A39700CF1625 /* TimersWithIntervalsCDUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4B8B952316A39700CF1625 /* TimersWithIntervalsCDUITests.swift */; };
+		7EC717162319CC4F009B5FEE /* EditTimerForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC717152319CC4F009B5FEE /* EditTimerForm.swift */; };
+		7EC7171A2319EE59009B5FEE /* IntervalEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC717172319EE59009B5FEE /* IntervalEntity+CoreDataClass.swift */; };
+		7EC7171B2319EE59009B5FEE /* DurationEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC717182319EE59009B5FEE /* DurationEntity+CoreDataClass.swift */; };
+		7EC7171C2319EE59009B5FEE /* TimerEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC717192319EE59009B5FEE /* TimerEntity+CoreDataClass.swift */; };
+		7EC7171E2319F6B3009B5FEE /* BaseTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC7171D2319F6B3009B5FEE /* BaseTimer.swift */; };
+		7EC71726231A27CB009B5FEE /* PickerControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC71725231A27CB009B5FEE /* PickerControl.swift */; };
+		7EC7172B231B195A009B5FEE /* alarms in Resources */ = {isa = PBXBuildFile; fileRef = 7EC71728231B1959009B5FEE /* alarms */; };
+		7EC7172C231B195A009B5FEE /* alerts in Resources */ = {isa = PBXBuildFile; fileRef = 7EC71729231B1959009B5FEE /* alerts */; };
+		7EC7172D231B195A009B5FEE /* soundMap.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7EC7172A231B195A009B5FEE /* soundMap.csv */; };
+		7EC7172F231B1A58009B5FEE /* SoundFileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC7172E231B1A58009B5FEE /* SoundFileData.swift */; };
+		7EC71731231B3309009B5FEE /* EditTimesForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC71730231B3309009B5FEE /* EditTimesForm.swift */; };
+		7EC71733231B331F009B5FEE /* EditSoundsForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC71732231B331F009B5FEE /* EditSoundsForm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +63,18 @@
 		7E4B8B912316A39700CF1625 /* TimersWithIntervalsCDUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimersWithIntervalsCDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E4B8B952316A39700CF1625 /* TimersWithIntervalsCDUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimersWithIntervalsCDUITests.swift; sourceTree = "<group>"; };
 		7E4B8B972316A39700CF1625 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EC717152319CC4F009B5FEE /* EditTimerForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTimerForm.swift; sourceTree = "<group>"; };
+		7EC717172319EE59009B5FEE /* IntervalEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IntervalEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7EC717182319EE59009B5FEE /* DurationEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DurationEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7EC717192319EE59009B5FEE /* TimerEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimerEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7EC7171D2319F6B3009B5FEE /* BaseTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTimer.swift; sourceTree = "<group>"; };
+		7EC71725231A27CB009B5FEE /* PickerControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerControl.swift; sourceTree = "<group>"; };
+		7EC71728231B1959009B5FEE /* alarms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = alarms; sourceTree = "<group>"; };
+		7EC71729231B1959009B5FEE /* alerts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = alerts; sourceTree = "<group>"; };
+		7EC7172A231B195A009B5FEE /* soundMap.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = soundMap.csv; sourceTree = "<group>"; };
+		7EC7172E231B1A58009B5FEE /* SoundFileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundFileData.swift; sourceTree = "<group>"; };
+		7EC71730231B3309009B5FEE /* EditTimesForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTimesForm.swift; sourceTree = "<group>"; };
+		7EC71732231B331F009B5FEE /* EditSoundsForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSoundsForm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,14 +125,19 @@
 		7E4B8B6F2316A39500CF1625 /* TimersWithIntervalsCD */ = {
 			isa = PBXGroup;
 			children = (
+				7EC71727231B1916009B5FEE /* Sounds */,
+				7EC71724231A2792009B5FEE /* Tools */,
+				7E4B8BA32316A4A700CF1625 /* Models */,
 				7E4B8B702316A39500CF1625 /* AppDelegate.swift */,
 				7E4B8B722316A39500CF1625 /* SceneDelegate.swift */,
 				7E4B8B772316A39500CF1625 /* ContentView.swift */,
 				7E4B8B792316A39700CF1625 /* Assets.xcassets */,
 				7E4B8B7E2316A39700CF1625 /* LaunchScreen.storyboard */,
 				7E4B8B812316A39700CF1625 /* Info.plist */,
-				7E4B8B742316A39500CF1625 /* TimersWithIntervalsCD.xcdatamodeld */,
 				7E4B8B7B2316A39700CF1625 /* Preview Content */,
+				7EC717152319CC4F009B5FEE /* EditTimerForm.swift */,
+				7EC71730231B3309009B5FEE /* EditTimesForm.swift */,
+				7EC71732231B331F009B5FEE /* EditSoundsForm.swift */,
 			);
 			path = TimersWithIntervalsCD;
 			sourceTree = "<group>";
@@ -137,6 +166,37 @@
 				7E4B8B972316A39700CF1625 /* Info.plist */,
 			);
 			path = TimersWithIntervalsCDUITests;
+			sourceTree = "<group>";
+		};
+		7E4B8BA32316A4A700CF1625 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7EC717182319EE59009B5FEE /* DurationEntity+CoreDataClass.swift */,
+				7EC717172319EE59009B5FEE /* IntervalEntity+CoreDataClass.swift */,
+				7EC717192319EE59009B5FEE /* TimerEntity+CoreDataClass.swift */,
+				7E4B8B742316A39500CF1625 /* TimersWithIntervalsCD.xcdatamodeld */,
+				7EC7171D2319F6B3009B5FEE /* BaseTimer.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7EC71724231A2792009B5FEE /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				7EC71725231A27CB009B5FEE /* PickerControl.swift */,
+				7EC7172E231B1A58009B5FEE /* SoundFileData.swift */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		7EC71727231B1916009B5FEE /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				7EC71728231B1959009B5FEE /* alarms */,
+				7EC71729231B1959009B5FEE /* alerts */,
+				7EC7172A231B195A009B5FEE /* soundMap.csv */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,9 +303,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EC7172C231B195A009B5FEE /* alerts in Resources */,
 				7E4B8B802316A39700CF1625 /* LaunchScreen.storyboard in Resources */,
 				7E4B8B7D2316A39700CF1625 /* Preview Assets.xcassets in Resources */,
+				7EC7172B231B195A009B5FEE /* alarms in Resources */,
 				7E4B8B7A2316A39700CF1625 /* Assets.xcassets in Resources */,
+				7EC7172D231B195A009B5FEE /* soundMap.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,7 +336,16 @@
 				7E4B8B762316A39500CF1625 /* TimersWithIntervalsCD.xcdatamodeld in Sources */,
 				7E4B8B712316A39500CF1625 /* AppDelegate.swift in Sources */,
 				7E4B8B782316A39500CF1625 /* ContentView.swift in Sources */,
+				7EC717162319CC4F009B5FEE /* EditTimerForm.swift in Sources */,
+				7EC71733231B331F009B5FEE /* EditSoundsForm.swift in Sources */,
+				7EC7171C2319EE59009B5FEE /* TimerEntity+CoreDataClass.swift in Sources */,
+				7EC7172F231B1A58009B5FEE /* SoundFileData.swift in Sources */,
+				7EC7171B2319EE59009B5FEE /* DurationEntity+CoreDataClass.swift in Sources */,
 				7E4B8B732316A39500CF1625 /* SceneDelegate.swift in Sources */,
+				7EC71726231A27CB009B5FEE /* PickerControl.swift in Sources */,
+				7EC7171E2319F6B3009B5FEE /* BaseTimer.swift in Sources */,
+				7EC71731231B3309009B5FEE /* EditTimesForm.swift in Sources */,
+				7EC7171A2319EE59009B5FEE /* IntervalEntity+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
