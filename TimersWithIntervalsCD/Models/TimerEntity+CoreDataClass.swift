@@ -25,11 +25,11 @@ public class TimerEntity: NSManagedObject, Identifiable {
     @NSManaged public var name: String?
     @NSManaged public var order: Int64
     @NSManaged public var duration: DurationEntity?
-    @NSManaged public var interval: DurationEntity?
+    @NSManaged public var interval: IntervalEntity?
 }
 
 extension TimerEntity {
-    public static func NewTimerFromInput(_ input: TimerProtocol, context: NSManagedObjectContext) -> TimerEntity {
+    public static func newTimerFromInput(_ input: TimerProtocol, context: NSManagedObjectContext) -> TimerEntity {
         let newTimer = TimerEntity(context: context)
         newTimer.name = input.name
         

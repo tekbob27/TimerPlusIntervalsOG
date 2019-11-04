@@ -35,7 +35,7 @@ struct TimerRow: View {
         VStack {
             if mode?.wrappedValue == .active {
                 VStack {
-                    NavigationLink(destination: EditTimerForm(timer: timerX)) {
+                    NavigationLink(destination: EditTimerForm().environmentObject(timerX)) {
                         VStack(alignment: .leading) {
                             Text(timerX.name ?? "").font(.headline).foregroundColor(.red)
                             HStack {
@@ -64,6 +64,7 @@ struct ContentView: View {
     // ❇️ Core Data property wrappers
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var mode
+    var soundData = SoundFileData()
 
     // ❇️ The BlogIdea class has an `allIdeasFetchRequest` static function that can be used here
     @FetchRequest(fetchRequest: TimerEntity.allTimersFetchRequest()) var timers: FetchedResults<TimerEntity>
@@ -76,7 +77,7 @@ struct ContentView: View {
             List {
                 ForEach(self.timers, id: \.id) { timerX in
                     VStack {
-                        NavigationLink(destination: EditTimerForm(timer: timerX)) {
+                        NavigationLink(destination: EditTimerForm().environmentObject(timerX)) {
                             VStack(alignment: .leading) {
                                 Text(timerX.name ?? "").font(.headline).foregroundColor(.red)
                                 HStack {
@@ -158,8 +159,10 @@ struct ContentView: View {
     }
 }
 
+#if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
+#endif

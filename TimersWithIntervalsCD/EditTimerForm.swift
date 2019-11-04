@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EditTimerForm: View {
-    @ObservedObject var timer: TimerEntity
+    @EnvironmentObject var timer: TimerEntity
     @State var updatedName: String = ""
     
     var body: some View {
@@ -17,10 +17,6 @@ struct EditTimerForm: View {
             Section(header: Text("Timer")) {
                 TextField("Name", text: $updatedName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onAppear {
-                        // Set the text field's initial value when it appears
-                        self.updatedName = self.timer.name ?? "New Timer"
-                }
             }
             NavigationLink(destination: EditTimesForm(timer: timer)) {
                 Text("Edit times").font(.headline).foregroundColor(.black)
@@ -28,6 +24,11 @@ struct EditTimerForm: View {
             NavigationLink(destination: EditSoundsForm(timer: timer)) {
                 Text("Edit sounds").font(.headline).foregroundColor(.black)
             }
+        }.onAppear {
+            // Set the text field's initial value when it appears
+            self.updatedName = self.timer.name ?? "New Timer"
+        }.onDisappear() {
+            try! self.timer.managedObjectContext?.save()
         }
     }
 }

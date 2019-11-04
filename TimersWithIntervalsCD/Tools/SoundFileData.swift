@@ -9,9 +9,10 @@
 import Foundation
 
 class SoundFileData {
-    var alarms: [[String]] = []
-    var alerts: [[String]] = []
-    
+    static var Alarms: [String] = []
+    static var Alerts: [String] = []
+    static var Lookup: [String:String] = [:]
+
     init() {
         readDataFromCSV("soundMap")
     }
@@ -35,9 +36,11 @@ class SoundFileData {
         for row in rows {
             let columns = row.components(separatedBy: ",")
             if columns.count == 4 {
-                self.alarms.append(columns)
+                SoundFileData.Alarms.append(columns[0])
+                SoundFileData.Lookup[columns[0]] = columns[1]
             } else {
-                self.alerts.append(columns)
+                SoundFileData.Alerts.append(columns[0])
+                SoundFileData.Lookup[columns[0]] = columns[1]
             }
         }
     }

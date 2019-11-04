@@ -22,6 +22,7 @@ struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {
             self._selection = selection
         }
 
+    
         func pickerView(_ pickerView: UIPickerView,
                         numberOfRowsInComponent component: Int) -> Int {
             data[component].count
@@ -33,26 +34,36 @@ struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {
 
         func pickerView(_ pickerView: UIPickerView,
                         widthForComponent component: Int) -> CGFloat {
-            return (pickerView.superview?.bounds.width ?? 0) * 0.33
+            (pickerView.superview?.bounds.width ?? 0) / CGFloat(data.count)
         }
 
         func pickerView(_ pickerView: UIPickerView,
                         rowHeightForComponent component: Int) -> CGFloat {
-            return 30
+            30.0
         }
 
         func pickerView(_ pickerView: UIPickerView,
                         viewForRow row: Int,
                         forComponent component: Int,
                         reusing view: UIView?) -> UIView {
+
             guard let reusableView = view as? UILabel else {
                 let label = UILabel(frame: .zero)
                 label.backgroundColor = UIColor.red.withAlphaComponent(0.15)
-                label.text = String(format: "%02d", Int("\(data[component][row])")!)
+                if data[component][row] is Int {
+                    label.text = String(format: "%02d", Int("\(data[component][row])")!)
+                } else if data[component][row] is String {
+                    label.text = String(format: "%@", "\(data[component][row])")
+                }
                 label.textAlignment = .center
                 return label
             }
-            reusableView.text = String(format: "%02d", Int("\(data[component][row])")!)
+            
+            if data[component][row] is Int {
+                reusableView.text = String(format: "%02d", Int("\(data[component][row])")!)
+            } else if data[component][row] is String {
+                reusableView.text = String(format: "%@", "\(data[component][row])")
+            }
             reusableView.textAlignment = .center
             return reusableView
         }

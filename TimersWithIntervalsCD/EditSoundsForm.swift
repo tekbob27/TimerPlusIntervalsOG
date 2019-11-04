@@ -10,12 +10,11 @@ import SwiftUI
 
 struct EditSoundsForm: View {
     @ObservedObject var timer: TimerEntity
-    var alarms = [[String]]()
-    var alerts = [[String]]()
+    @Environment(\.managedObjectContext) var managedObjectContext
 
-    @State var alarmSound = ""
-    @State var alertSound = ""
-    var soundData = SoundFileData()
+    @State var alarmSound: [String] = ["",""]
+    @State var alertSound: [String] = []
+    @State var sounds: [[String]] = []
 
     var body: some View {
         Form {
@@ -23,18 +22,52 @@ struct EditSoundsForm: View {
                 Text("Name: \(timer.name!)")
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
-            Section(header: Text("Sounds")) {
-                Picker(selection: $timer.alarmSound, label: Text("Alarms")) {
-                    ForEach(0 ..< soundData.alarms.count) {
-                        Text(self.soundData.alarms[$0][0]).tag($0)
-                    }
-                }
-                Picker(selection: $timer.alertSound, label: Text("Alerts")) {
-                    ForEach(0 ..< soundData.alerts.count) {
-                        Text(self.soundData.alerts[$0][0]).tag($0)
-                    }
-                }
+            Section(header: Text("Sounds"),
+                    footer: Text("Alarm: \(getAlarmSound())\tAlert: \(getAlertSound())"),
+                    content: {
+                        HStack(alignment: .center, spacing: 0) {
+                            VStack(alignment: .center, spacing: 0) {
+                                HStack(alignment: .top, spacing: 0.0) {
+                                    Spacer()
+                                    Text("Alarms")
+                                    Spacer()
+                                    Text("Alerts")
+                                    Spacer()
+                                }
+                                PickerControl(data: $sounds,
+                                              selection: $alarmSound)
+                            }
+                        }.frame(width: UIScreen.main.bounds.size.width, height: 225.0, alignment: .center)
+            })
+        }.onAppear() {
+            if self.alarmSound.count == 0 {
+                self.alarmSound.append(self.timer.alarmSound ?? "")
+                self.alertSound.append(self.timer.alertSound ?? "")
+            } else {
+                self.alarmSound[0] = self.timer.alarmSound ?? ""
+                self.alarmSound[1] = self.timer.alertSound ?? ""
             }
+            
+            if self.sounds.count == 0 {
+                self.sounds.append(SoundFileData.Alarms)
+                self.sounds.append(SoundFileData.Alerts)
+            }
+        }.onDisappear() {
+            try! self.timer.managedObjectContext?.save()
         }
+    }
+    
+    func getAlarmSound() -> String {
+        if self.alarmSound[0] != "" {
+            self.timer.alarmSound = self.alarmSound[0]
+        }
+        return self.alarmSound[0]
+    }
+    
+    func getAlertSound() -> String {
+        if self.alarmSound[1] != "" {
+            self.timer.alertSound = self.alarmSound[1]
+        }
+        return self.alarmSound[1]
     }
 }
