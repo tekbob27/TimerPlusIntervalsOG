@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="19B88" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="DurationEntity" representedClassName=".DurationEntity" syncable="YES">
-        <attribute name="hours" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="String" defaultValueString="UUID().uuidstring"/>
-        <attribute name="minutes" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="seconds" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="timer" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TimerEntity" inverseName="duration" inverseEntity="TimerEntity"/>
+    <entity name="AbstractInterval" representedClassName=".AbstractInterval" isAbstract="YES" syncable="YES">
+        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="elapsed" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="sound" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="IntervalEntity" representedClassName=".IntervalEntity" syncable="YES">
-        <attribute name="hours" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    <entity name="Duration" representedClassName=".Duration" parentEntity="AbstractInterval" syncable="YES">
         <attribute name="id" attributeType="String" defaultValueString="UUID().uuidstring"/>
-        <attribute name="minutes" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="seconds" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="timer" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TimerEntity" inverseName="interval" inverseEntity="TimerEntity"/>
+        <relationship name="timer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Timers" inverseName="duration" inverseEntity="Timers"/>
     </entity>
-    <entity name="TimerEntity" representedClassName=".TimerEntity" syncable="YES">
-        <attribute name="alarmSound" optional="YES" attributeType="String" defaultValueString=""/>
-        <attribute name="alertSound" optional="YES" attributeType="String" defaultValueString=""/>
+    <entity name="Interlude" representedClassName=".Interlude" parentEntity="AbstractInterval" syncable="YES">
+        <attribute name="id" attributeType="String" defaultValueString="UUID().uuidstring"/>
+        <relationship name="timer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Timers" inverseName="interlude" inverseEntity="Timers"/>
+    </entity>
+    <entity name="Timers" representedClassName=".Timers" syncable="YES">
         <attribute name="creationDate" attributeType="Date" minDateTimeInterval="588688740" defaultDateTimeInterval="588688980" usesScalarValueType="NO"/>
-        <attribute name="elapsedTime" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="String" defaultValueString="UUID().uuidstring"/>
-        <attribute name="intervalConsumed" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString="New Timer"/>
         <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="duration" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DurationEntity" inverseName="timer" inverseEntity="DurationEntity"/>
-        <relationship name="interval" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="IntervalEntity" inverseName="timer" inverseEntity="IntervalEntity"/>
+        <relationship name="duration" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Duration" inverseName="timer" inverseEntity="Duration"/>
+        <relationship name="interlude" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Interlude" inverseName="timer" inverseEntity="Interlude"/>
     </entity>
     <elements>
-        <element name="DurationEntity" positionX="-54" positionY="54" width="128" height="118"/>
-        <element name="IntervalEntity" positionX="-216" positionY="9" width="128" height="118"/>
-        <element name="TimerEntity" positionX="-384.83203125" positionY="-125.34765625" width="128" height="193"/>
+        <element name="Duration" positionX="-54" positionY="54" width="128" height="73"/>
+        <element name="AbstractInterval" positionX="-216" positionY="9" width="128" height="88"/>
+        <element name="Timers" positionX="-384.83203125" positionY="-125.34765625" width="128" height="133"/>
+        <element name="Interlude" positionX="-180" positionY="45" width="128" height="73"/>
     </elements>
 </model>

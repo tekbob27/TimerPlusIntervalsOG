@@ -8,18 +8,24 @@
 
 import SwiftUI
 
-struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {        
-    @Binding var data: [[Data]]
-    @Binding var selection: [Data]
+public var data: [[Int64]] = [
+    Array(0...24),
+    Array(0...59),
+    Array(0...59)
+]
+
+struct IntervalPickerControl<Interval>: UIViewRepresentable where Interval: AbstractInterval {
+    @Binding var selection: Interval
+    public var selectedRows: [String] = []
 
     class Coordinator: NSObject, UIPickerViewDelegate, UIPickerViewDataSource {
 
-        @Binding var data: [[Data]]
-        @Binding var selection: [Data]
-
-        init(data: Binding<[[Data]]>, selection: Binding<[Data]>) {
-            self._data = data
+        @Binding var selection: Interval
+        private var selectedRows: [String] = []
+        
+        init(selection: Binding<Interval>, selectedRows: [String]) {
             self._selection = selection
+            self.selectedRows = selectedRows
         }
 
     
@@ -50,20 +56,12 @@ struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {
             guard let reusableView = view as? UILabel else {
                 let label = UILabel(frame: .zero)
                 label.backgroundColor = UIColor.red.withAlphaComponent(0.15)
-                if data[component][row] is Int64 {
-                    label.text = String(format: "%02d", Int("\(data[component][row])")!)
-                } else if data[component][row] is String {
-                    label.text = String(format: "%@", "\(data[component][row])")
-                }
+                label.text = String(format: "%02d", Int("\(data[component][row])")!)
                 label.textAlignment = .center
                 return label
             }
             
-            if data[component][row] is Int64 {
-                reusableView.text = String(format: "%02d", Int("\(data[component][row])")!)
-            } else if data[component][row] is String {
-                reusableView.text = String(format: "%@", "\(data[component][row])")
-            }
+            reusableView.text = String(format: "%02d", Int("\(data[component][row])")!)
             reusableView.textAlignment = .center
             return reusableView
         }
@@ -72,29 +70,30 @@ struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {
                         didSelectRow row: Int,
                         inComponent component: Int) {
             let value = data[component][row]
-            selection[component] = value
+            selectedRows[component] = "\(value)"
+            $selection.wrappedValue.duration = AbstractInterval.fromTime(timeArray: selectedRows)
         }
     }
 
-    func makeCoordinator() -> PickerControl.Coordinator {
-        return Coordinator(data: $data,
-                           selection: $selection)
+    func makeCoordinator() -> IntervalPickerControl.Coordinator {
+        return Coordinator(selection: $selection)
     }
 
-    func makeUIView(context: UIViewRepresentableContext<PickerControl>) -> UIPickerView {
+    func makeUIView(context: UIViewRepresentableContext<IntervalPickerControl>) -> UIPickerView {
         let picker = UIPickerView()
         picker.delegate = context.coordinator
         return picker
     }
 
     func updateUIView(_ uiView: UIPickerView,
-                      context: UIViewRepresentableContext<PickerControl>) {
+                      context: UIViewRepresentableContext<IntervalPickerControl>) {
 
         uiView.reloadAllComponents()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.selection.enumerated().forEach { tuple in
+            self.selectedRows.enumerated().forEach { tuple in
                 let (offset, value) = tuple
-                let row = self.data[offset].firstIndex { $0 == value } ?? 0
+                let intVal = Int64(value) ?? 0
+                let row = data[offset].firstIndex { $0 == intVal } ?? 0
                 uiView.selectRow(row, inComponent: offset, animated: false)
             }
         }

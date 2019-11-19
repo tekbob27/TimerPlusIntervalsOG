@@ -20,7 +20,7 @@ public class IntervalEntity: NSManagedObject, Identifiable {
     @NSManaged public var hours: Int64
     @NSManaged public var minutes: Int64
     @NSManaged public var seconds: Int64
-    @NSManaged public var id: String?
+    @NSManaged public var id: String
     @NSManaged public var timer: NSSet?
 }
 

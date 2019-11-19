@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EditTimerForm: View {
-    @EnvironmentObject var timer: TimerEntity
+    @EnvironmentObject var timer: Timers
     @State var updatedName: String = ""
     
     var body: some View {
@@ -26,7 +26,7 @@ struct EditTimerForm: View {
             }
         }.onAppear {
             // Set the text field's initial value when it appears
-            self.updatedName = self.timer.name ?? "New Timer"
+            self.updatedName = self.timer.name
         }.onDisappear() {
             try! self.timer.managedObjectContext?.save()
         }

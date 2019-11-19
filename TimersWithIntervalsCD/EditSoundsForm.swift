@@ -9,21 +9,18 @@
 import SwiftUI
 
 struct EditSoundsForm: View {
-    @ObservedObject var timer: TimerEntity
+    @ObservedObject var timer: Timers
     @Environment(\.managedObjectContext) var managedObjectContext
 
-    @State var alarmSound: [String] = ["",""]
-    @State var alertSound: [String] = []
     @State var sounds: [[String]] = []
 
     var body: some View {
         Form {
             Section(header: Text("Timer")) {
-                Text("Name: \(timer.name!)")
+                Text("Name: \(timer.name)")
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
-            Section(header: Text("Sounds"),
-                    footer: Text("Alarm: \(getAlarmSound())\tAlert: \(getAlertSound())"),
+            Section(header: Text("Alarm: \(self.timer.duration.sound)\t\tAlert: \(self.timer.interlude.sound)"),
                     content: {
                         HStack(alignment: .center, spacing: 0) {
                             VStack(alignment: .center, spacing: 0) {
@@ -35,19 +32,11 @@ struct EditSoundsForm: View {
                                     Spacer()
                                 }
                                 PickerControl(data: $sounds,
-                                              selection: $alarmSound)
+                                              selection: self.$timer.sounds)
                             }
                         }.frame(width: UIScreen.main.bounds.size.width, height: 225.0, alignment: .center)
             })
         }.onAppear() {
-            if self.alarmSound.count == 0 {
-                self.alarmSound.append(self.timer.alarmSound ?? "")
-                self.alertSound.append(self.timer.alertSound ?? "")
-            } else {
-                self.alarmSound[0] = self.timer.alarmSound ?? ""
-                self.alarmSound[1] = self.timer.alertSound ?? ""
-            }
-            
             if self.sounds.count == 0 {
                 self.sounds.append(SoundFileData.Alarms)
                 self.sounds.append(SoundFileData.Alerts)
@@ -55,19 +44,5 @@ struct EditSoundsForm: View {
         }.onDisappear() {
             try! self.timer.managedObjectContext?.save()
         }
-    }
-    
-    func getAlarmSound() -> String {
-        if self.alarmSound[0] != "" {
-            self.timer.alarmSound = self.alarmSound[0]
-        }
-        return self.alarmSound[0]
-    }
-    
-    func getAlertSound() -> String {
-        if self.alarmSound[1] != "" {
-            self.timer.alertSound = self.alarmSound[1]
-        }
-        return self.alarmSound[1]
     }
 }

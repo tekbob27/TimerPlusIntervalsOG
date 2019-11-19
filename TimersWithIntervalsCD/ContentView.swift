@@ -28,7 +28,7 @@ struct TrailingListItemsView: View {
 }
 
 struct TimerRow: View {
-    var timerX: TimerEntity
+    var timerX: Timers
     @Environment(\.editMode) var mode
 
     var body: some View {
@@ -37,22 +37,22 @@ struct TimerRow: View {
                 VStack {
                     NavigationLink(destination: EditTimerForm().environmentObject(timerX)) {
                         VStack(alignment: .leading) {
-                            Text(timerX.name ?? "").font(.headline).foregroundColor(.red)
+                            Text(timerX.name).font(.headline).foregroundColor(.red)
                             HStack {
-                                Text(timerX.duration?.toString() ?? "00:00:00").font(.footnote)
+                                Text(timerX.duration.toString()).font(.footnote)
                                 Spacer()
-                                Text(timerX.interval?.toString() ?? "00:00:00").font(.footnote)
+                                Text(timerX.interlude.toString()).font(.footnote)
                             }
                         }
                     }
                 }
             } else {
                 VStack(alignment: .leading) {
-                    Text(timerX.name ?? "").font(.headline)
+                    Text(timerX.name).font(.headline)
                     HStack {
-                        Text(timerX.duration?.toString() ?? "00:00:00").font(.footnote)
+                        Text(timerX.duration.toString()).font(.footnote)
                         Spacer()
-                        Text(timerX.interval?.toString() ?? "00:00:00").font(.footnote)
+                        Text(timerX.interlude.toString()).font(.footnote)
                     }
                 }
             }
@@ -67,7 +67,7 @@ struct ContentView: View {
     var soundData = SoundFileData()
 
     // ❇️ The BlogIdea class has an `allIdeasFetchRequest` static function that can be used here
-    @FetchRequest(fetchRequest: TimerEntity.allTimersFetchRequest()) var timers: FetchedResults<TimerEntity>
+    @FetchRequest(fetchRequest: Timers.allTimersFetchRequest()) var timers: FetchedResults<Timers>
     
     // ℹ️ Temporary in-memory storage for adding new blog ideas
     @State private var newName = ""
@@ -79,11 +79,11 @@ struct ContentView: View {
                     VStack {
                         NavigationLink(destination: EditTimerForm().environmentObject(timerX)) {
                             VStack(alignment: .leading) {
-                                Text(timerX.name ?? "").font(.headline).foregroundColor(.red)
+                                Text(timerX.name).font(.headline).foregroundColor(.red)
                                 HStack {
-                                    Text(timerX.duration?.toString() ?? "00:00:00").font(.footnote)
+                                    Text(timerX.duration.toString()).font(.footnote)
                                     Spacer()
-                                    Text(timerX.interval?.toString() ?? "00:00:00").font(.footnote)
+                                    Text(timerX.interlude.toString()).font(.footnote)
                                 }
                             }
                         }
@@ -112,7 +112,11 @@ struct ContentView: View {
     }
     
     func addItem() {
-        let timer = TimerEntity(context: self.managedObjectContext)
+        let timer = Timers(context: self.managedObjectContext)
+        timer.duration = Duration(context: self.managedObjectContext)
+        timer.interlude = Interlude(context: self.managedObjectContext)
+        // Duration.fromString(timer.duration, timeString: "00:00:00")
+        // Interlude.fromString(timer.interlude, timeString: "00:00:00")
         timer.name = "New Timer \(timers.count)"
         timer.order = Int64(timers.count)
         timer.id = UUID().uuidString
@@ -150,8 +154,6 @@ struct ContentView: View {
     }
 
     func delete(at offsets: IndexSet) {
-        // ❇️ Gets the BlogIdea instance out of the blogIdeas array
-        // ❇️ and deletes it using the @Environment's managedObjectContext
         let blogIdeaToDelete = self.timers[offsets.first!]
         self.managedObjectContext.delete(blogIdeaToDelete)
         
