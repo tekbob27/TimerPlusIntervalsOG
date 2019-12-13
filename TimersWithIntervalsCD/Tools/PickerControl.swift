@@ -8,7 +8,21 @@
 
 import SwiftUI
 
-struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {        
+//let formatter = NumberFormatter()
+//
+extension String.StringInterpolation {
+    mutating func appendInterpolation(_ number: Int, style: NumberFormatter.Style = .none) {
+        let formatter = NumberFormatter()
+        formatter.minimumIntegerDigits = 2
+        formatter.numberStyle = style
+
+        if let result = formatter.string(from: number as NSNumber) {
+            appendLiteral(result)
+        }
+    }
+}
+
+struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {
     @Binding var data: [[Data]]
     @Binding var selection: [Data]
 
@@ -50,20 +64,22 @@ struct PickerControl<Data>: UIViewRepresentable where Data: Equatable {
             guard let reusableView = view as? UILabel else {
                 let label = UILabel(frame: .zero)
                 label.backgroundColor = UIColor.red.withAlphaComponent(0.15)
-                if data[component][row] is Int64 {
-                    label.text = String(format: "%02d", Int("\(data[component][row])")!)
-                } else if data[component][row] is String {
-                    label.text = String(format: "%@", "\(data[component][row])")
-                }
+                label.text = "\(data[component][row])"
+//                if data[component][row] is Int64 {
+//                    label.text = String(format: "%02d", Int("\(data[component][row])")!)
+//                } else if data[component][row] is String {
+//                    label.text = String(format: "%@", "\(data[component][row])")
+//                }
                 label.textAlignment = .center
                 return label
             }
             
-            if data[component][row] is Int64 {
-                reusableView.text = String(format: "%02d", Int("\(data[component][row])")!)
-            } else if data[component][row] is String {
-                reusableView.text = String(format: "%@", "\(data[component][row])")
-            }
+            reusableView.text = "\(data[component][row])"
+//            if data[component][row] is Int64 {
+//                reusableView.text = String(format: "%02d", Int("\(data[component][row])")!)
+//            } else if data[component][row] is String {
+//                reusableView.text = String(format: "%@", "\(data[component][row])")
+//            }
             reusableView.textAlignment = .center
             return reusableView
         }

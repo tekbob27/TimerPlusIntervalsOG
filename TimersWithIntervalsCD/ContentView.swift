@@ -9,91 +9,92 @@
 import SwiftUI
 import CoreData
 
-struct TrailingListItemsView: View {
-    @Environment(\.editMode) var mode
-    var actionProvider: ContentView
-    var body: some View {
-        HStack {
-            EditButton().padding()
-            
-            Spacer()
-            Button(action: {
-                self.actionProvider.addItem()
-            })
-            {
-                Text("+")
-            }
-        }
-    }
-}
-
-struct TimerRow: View {
-    var timerX: Timers
-    @Environment(\.editMode) var mode
+struct Editor: View {
+    @ObservedObject var timer: Timers
+    var mode: EditMode = .inactive
 
     var body: some View {
-        VStack {
-            if mode?.wrappedValue == .active {
-                VStack {
-                    NavigationLink(destination: EditTimerForm().environmentObject(timerX)) {
-                        VStack(alignment: .leading) {
-                            Text(timerX.name).font(.headline).foregroundColor(.red)
-                            HStack {
-                                Text(timerX.duration.toString()).font(.footnote)
-                                Spacer()
-                                Text(timerX.interlude.toString()).font(.footnote)
-                            }
-                        }
-                    }
-                }
+        Group {
+            if self.mode == .active {
+                EditTimerForm(timer: timer)
             } else {
-                VStack(alignment: .leading) {
-                    Text(timerX.name).font(.headline)
-                    HStack {
-                        Text(timerX.duration.toString()).font(.footnote)
-                        Spacer()
-                        Text(timerX.interlude.toString()).font(.footnote)
-                    }
-                }
+                DisplayTimer(timer: timer)
             }
         }
     }
 }
 
 struct ContentView: View {
-    // ❇️ Core Data property wrappers
     @Environment(\.managedObjectContext) var managedObjectContext
-    @Environment(\.editMode) var mode
+    @Environment(\.editMode) private var editMode
     var soundData = SoundFileData()
 
-    // ❇️ The BlogIdea class has an `allIdeasFetchRequest` static function that can be used here
     @FetchRequest(fetchRequest: Timers.allTimersFetchRequest()) var timers: FetchedResults<Timers>
+
+    @State private var isEditMode: EditMode = .inactive
+    @State private var selection: String? = ""
+    @State private var isAddingTimer: Bool = false
+    @State private var sub: TempusBrevis = TempusBrevis()
     
-    // ℹ️ Temporary in-memory storage for adding new blog ideas
-    @State private var newName = ""
-    @State private var editing: Bool = false
     var body: some View {
         NavigationView {
             List {
-                ForEach(self.timers, id: \.id) { timerX in
-                    VStack {
-                        NavigationLink(destination: EditTimerForm().environmentObject(timerX)) {
-                            VStack(alignment: .leading) {
-                                Text(timerX.name).font(.headline).foregroundColor(.red)
-                                HStack {
-                                    Text(timerX.duration.toString()).font(.footnote)
-                                    Spacer()
-                                    Text(timerX.interlude.toString()).font(.footnote)
-                                }
-                            }
+                Group {
+                    if isAddingTimer {
+                        VStack {
+                            NewTimerForm(timer: sub)
+//                            Button(action: {
+//                                try! (self.sub.createTimer(context: self.managedObjectContext)).managedObjectContext?.save()
+//                            } ) { Text("Save") }
                         }
                     }
+                    Section(header: Text("Timers").font(.headline).foregroundColor(.blue)) {
+                        ForEach(self.timers, id: \.id) { timerX in
+                            NavigationLink(destination: Editor(timer: timerX, mode: self.isEditMode), tag: timerX.id, selection: self.$selection) {
+                                VStack(alignment: .leading) {
+                                    Text(timerX.name).font(.headline).foregroundColor(.red)
+                                    HStack {
+                                        Text(timerX.duration.toString()).font(.footnote)
+                                        Spacer()
+                                        Text(timerX.interlude.toString()).font(.footnote)
+                                    }
+                                }
+                            }
+                            .gesture(TapGesture().onEnded {
+                                self.selection = timerX.id
+                            })
+                        }
+                        .onDelete(perform: delete)
+                        .onMove(perform: move)
+                    }
                 }
-                .onDelete(perform: delete)
-                .onMove(perform: move)
             }
             .navigationBarTitle(Text("Timers").font(.title).bold(), displayMode: .inline)
-            .navigationBarItems(trailing: TrailingListItemsView(actionProvider: self))
+            .navigationBarItems(leading: HStack {
+                Button(action: {
+                    do {
+                        try self.managedObjectContext.save()
+                    } catch {
+                        print(error)
+                    }
+                    }) { Text("Save")}.disabled(!self.managedObjectContext.hasChanges)
+                },
+                trailing: HStack {
+                Button(action: {
+                    self.$isEditMode.wrappedValue.toggle()
+                })
+                {
+                    Image(systemName: self.$isEditMode.wrappedValue == .active ? "pencil.slash" : "pencil")
+                }.padding()
+                Spacer()
+                Button(action: {
+                    self.isAddingTimer.toggle()
+                })
+                {
+                    Image(systemName: self.isAddingTimer ? "checkmark" : "plus")
+                }
+            }).environment(\.editMode, self.$isEditMode)
+            .animation(.default)
         }
     }
 
@@ -111,22 +112,6 @@ struct ContentView: View {
         }
     }
     
-    func addItem() {
-        let timer = Timers(context: self.managedObjectContext)
-        timer.duration = Duration(context: self.managedObjectContext)
-        timer.interlude = Interlude(context: self.managedObjectContext)
-        // Duration.fromString(timer.duration, timeString: "00:00:00")
-        // Interlude.fromString(timer.interlude, timeString: "00:00:00")
-        timer.name = "New Timer \(timers.count)"
-        timer.order = Int64(timers.count)
-        timer.id = UUID().uuidString
-        do {
-            try self.managedObjectContext.save()
-        } catch {
-            print(error)
-        }
-    }
-
     func move(from source: IndexSet, to destination: Int) {
         let start = source.first ?? 0
         let end = destination
@@ -154,12 +139,19 @@ struct ContentView: View {
     }
 
     func delete(at offsets: IndexSet) {
-        let blogIdeaToDelete = self.timers[offsets.first!]
-        self.managedObjectContext.delete(blogIdeaToDelete)
+        let timerToDelete = self.timers[offsets.first!]
+        self.managedObjectContext.delete(timerToDelete)
         
         self.reIndex()
     }
 }
+
+extension EditMode {
+    mutating func toggle() {
+        self = self == .active ? .inactive : .active
+    }
+}
+
 
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {

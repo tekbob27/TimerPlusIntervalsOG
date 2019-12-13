@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftUI
+import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -22,13 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Use a UIHostingController as window root view controller.
+        // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
+
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             
-            // ❇️ Pass it to the ContentView through the managedObjectContext @Environment variable
-            let contentView = ContentView()
-                .environment(\.managedObjectContext, SceneDelegate.managedObjectContext)
-            
+            let contentView = ContentView().environment(\.managedObjectContext, context)
+                
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
@@ -50,6 +52,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -65,7 +68,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
-
 
 }
 
