@@ -38,7 +38,7 @@ extension AbstractInterval {
         formatter.allowedUnits = [ .hour, .minute, .second ] // Units to display in the formatted string
         formatter.zeroFormattingBehavior = [ .pad ] // Pad with zeroes where appropriate for the locale
 
-        return formatter.string(from: self.duration) ?? "00:00:00"
+        return formatter.string(from: self.duration - self.elapsed) ?? "00:00:00"
     }
     
     public var parts: [String] {
@@ -53,5 +53,25 @@ extension AbstractInterval {
         }
 
         return interval
+    }
+
+    public var components: [ Int ] {
+        get {
+            let a = self.toString().components(separatedBy: ":")
+            var i: [Int] = []
+            for str in a {
+                i.append(Int(str) ?? 0)
+            }
+            return i
+        }
+        set {
+            var interval: Double = 0
+
+            for (index, part) in newValue.reversed().enumerated() {
+                interval += Double(part) * pow(Double(60), Double(index))
+            }
+
+            self.duration = interval
+        }
     }
 }

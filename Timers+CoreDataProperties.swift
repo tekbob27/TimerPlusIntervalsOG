@@ -31,4 +31,17 @@ extension Timers {
           
         return request
     }
+
+    public static func timersWithPredicateFetchRequest(predicate: NSPredicate) -> NSFetchRequest<Timers> {
+        let request: NSFetchRequest<Timers> = Timers.fetchRequest()
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "order", ascending: true)]
+        request.predicate = predicate
+        return request
+    }
+    
+    public func toString() -> String {
+        String(format: "%@|%@|%@|%@|%@", self.name, self.duration.toString(), self.interlude.toString(), self.duration.sound, self.interlude.sound)
+    }
+
 }

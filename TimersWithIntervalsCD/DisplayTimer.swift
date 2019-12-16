@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct DisplayTimer: View {
-    @ObservedObject var interrupted: InterruptedTimer
+    @ObservedObject var interrupted: TempusInterruptus
     @ObservedObject var timer: Timers
     @State var showingEditor = false
 
     init(timer: Timers) {
         self.timer = timer
-        self.interrupted = InterruptedTimer(timer)
+        self.interrupted = TempusInterruptus(timer)
     }
     var body: some View {
         NavigationView {
@@ -26,6 +26,6 @@ struct DisplayTimer: View {
             }
         }.navigationBarTitle(Text("In Flight").font(.title).bold(), displayMode: .inline)
          .navigationBarItems(trailing: Button(action: { self.showingEditor = true }) { Text("Edit")})
-         .sheet(isPresented: $showingEditor) { EditTimerForm(timer: self.timer) }
+         // .sheet(isPresented: $showingEditor) { EditTimerForm(timer: self.timer) }
     }
 }

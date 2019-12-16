@@ -10,15 +10,45 @@ import SwiftUI
 import CoreData
 
 struct Editor: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var timer: Timers
     var mode: EditMode = .inactive
+    var tempus: TempusNova = TempusNova()
 
     var body: some View {
         Group {
             if self.mode == .active {
-                EditTimerForm(timer: timer)
+                TimerForm(timer: TempusNova.copyTimer(from: timer, to: tempus))
+                Button(action: {
+                    TempusFaci.update(from: self.tempus, context: self.managedObjectContext)
+                } ) { Text("Update") }
             } else {
-                DisplayTimer(timer: timer)
+                DisplayTimer(timer: self.timer)
+            }
+        }
+    }
+}
+
+struct TimerForm: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @ObservedObject var timer: TempusNova = TempusNova()
+
+    var body: some View {
+        Form {
+            Section(header: Text("Add New Timer")) {
+                TextField("Name", text: self.$timer.name)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                NavigationLink(destination: TimesForm(timer: self.timer)) {
+                    Text("Edit Times").font(.headline).foregroundColor(.black)
+                }
+                NavigationLink(destination: SoundsForm(timer: self.timer)) {
+                    Text("Edit Sounds").font(.headline).foregroundColor(.black)
+                }
+                VStack(alignment: .center) {
+                    Button(action: {
+                        _ = TempusFaci.add(from: self.timer, context: self.managedObjectContext)
+                    } ) { Text("Add") }
+                }
             }
         }
     }
@@ -27,6 +57,7 @@ struct Editor: View {
 struct ContentView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) private var editMode
+    
     var soundData = SoundFileData()
 
     @FetchRequest(fetchRequest: Timers.allTimersFetchRequest()) var timers: FetchedResults<Timers>
@@ -34,67 +65,65 @@ struct ContentView: View {
     @State private var isEditMode: EditMode = .inactive
     @State private var selection: String? = ""
     @State private var isAddingTimer: Bool = false
-    @State private var sub: TempusBrevis = TempusBrevis()
     
     var body: some View {
         NavigationView {
-            List {
-                Group {
-                    if isAddingTimer {
-                        VStack {
-                            NewTimerForm(timer: sub)
-//                            Button(action: {
-//                                try! (self.sub.createTimer(context: self.managedObjectContext)).managedObjectContext?.save()
-//                            } ) { Text("Save") }
+            GeometryReader { geometry in
+                List {
+                    Group {
+                        if self.isAddingTimer {
+                            TimerForm().frame(width: geometry.size.width * 0.9, height: 210, alignment: .center)
+                        } else {
+                            TimerForm().hidden().frame(width: geometry.size.width, height: 0, alignment: .center)
                         }
-                    }
-                    Section(header: Text("Timers").font(.headline).foregroundColor(.blue)) {
-                        ForEach(self.timers, id: \.id) { timerX in
-                            NavigationLink(destination: Editor(timer: timerX, mode: self.isEditMode), tag: timerX.id, selection: self.$selection) {
-                                VStack(alignment: .leading) {
-                                    Text(timerX.name).font(.headline).foregroundColor(.red)
-                                    HStack {
-                                        Text(timerX.duration.toString()).font(.footnote)
-                                        Spacer()
-                                        Text(timerX.interlude.toString()).font(.footnote)
+                        Section(header: Text("Timers").font(.headline).foregroundColor(.blue)) {
+                            ForEach(self.timers, id: \.id) { timerX in
+                                NavigationLink(destination: Editor(timer: timerX, mode: self.isEditMode), tag: timerX.id, selection: self.$selection) {
+                                    VStack(alignment: .leading) {
+                                        Text(timerX.name).font(.headline).foregroundColor(.red)
+                                        HStack {
+                                            Text(timerX.duration.toString()).font(.footnote)
+                                            Spacer()
+                                            Text(timerX.interlude.toString()).font(.footnote)
+                                        }
                                     }
                                 }
+                                .gesture(TapGesture().onEnded {
+                                    self.selection = timerX.id
+                                })
                             }
-                            .gesture(TapGesture().onEnded {
-                                self.selection = timerX.id
-                            })
+                            .onDelete(perform: self.delete)
+                            .onMove(perform: self.move)
                         }
-                        .onDelete(perform: delete)
-                        .onMove(perform: move)
                     }
                 }
+                .navigationBarTitle(Text("Timers").font(.title).bold(), displayMode: .inline)
+                .navigationBarItems(leading: HStack {
+                    Button(action: {
+                        do {
+                            try self.managedObjectContext.save()
+                        } catch {
+                            print(error)
+                        }
+                        }) { Text("Save")}.disabled(!self.managedObjectContext.hasChanges)
+                    },
+                    trailing: HStack {
+                    Button(action: {
+                        self.$isEditMode.wrappedValue.toggle()
+                    })
+                    {
+                        Image(systemName: self.$isEditMode.wrappedValue == .active ? "pencil.slash" : "pencil")
+                    }.padding()
+                    Spacer()
+                    Button(action: {
+                        self.isAddingTimer.toggle()
+                    })
+                    {
+                        Image(systemName: self.isAddingTimer ? "checkmark" : "plus")
+                    }
+                }).environment(\.editMode, self.$isEditMode)
+                .animation(.default)
             }
-            .navigationBarTitle(Text("Timers").font(.title).bold(), displayMode: .inline)
-            .navigationBarItems(leading: HStack {
-                Button(action: {
-                    do {
-                        try self.managedObjectContext.save()
-                    } catch {
-                        print(error)
-                    }
-                    }) { Text("Save")}.disabled(!self.managedObjectContext.hasChanges)
-                },
-                trailing: HStack {
-                Button(action: {
-                    self.$isEditMode.wrappedValue.toggle()
-                })
-                {
-                    Image(systemName: self.$isEditMode.wrappedValue == .active ? "pencil.slash" : "pencil")
-                }.padding()
-                Spacer()
-                Button(action: {
-                    self.isAddingTimer.toggle()
-                })
-                {
-                    Image(systemName: self.isAddingTimer ? "checkmark" : "plus")
-                }
-            }).environment(\.editMode, self.$isEditMode)
-            .animation(.default)
         }
     }
 
@@ -142,6 +171,12 @@ struct ContentView: View {
         let timerToDelete = self.timers[offsets.first!]
         self.managedObjectContext.delete(timerToDelete)
         
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print(error)
+        }
+
         self.reIndex()
     }
 }
